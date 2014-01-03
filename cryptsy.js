@@ -48,11 +48,15 @@ function CryptsyClient(key, secret) {
       }
     }
     request(options, function(err, res, body) {
-      var response = JSON.parse(body);
-      if(response.success === '1' && typeof callback == typeof Function)
-        callback(response.return);
-      else if(response.error)
-        throw new Error(response.error);
+      if (err)
+        callback(err);
+      else {
+        var response = JSON.parse(body);
+        if(response.success === '1')
+          callback(null, response.return);
+        else if(response.error)
+          callback(response.error);
+      }
     });
   }
 
@@ -61,11 +65,11 @@ function CryptsyClient(key, secret) {
     if(!self.markets || !self.markets.length)
     {
       self.getmarkets(function() {
-        callback(self.markets[marketname]);
+        callback(null, self.markets[marketname]);
       });
     }
     else
-      callback(self.markets[marketname]);
+      callback(null, self.markets[marketname]);
   };
 
   self.marketdata = function(callback) {
@@ -81,13 +85,13 @@ function CryptsyClient(key, secret) {
   }
 
   self.getmarkets = function(callback) {
-    callback2 = function(markets) {
+    callback2 = function(err, markets) {
       self.markets = {};
       for(var i in markets)
       {
         self.markets[markets[i].primary_currency_code + markets[i].secondary_currency_code] = markets[i].marketid;
       }
-      callback(markets);
+      callback(err, markets);
     }
     api_query('getmarkets', callback2);
   }
