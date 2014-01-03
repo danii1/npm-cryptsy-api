@@ -51,11 +51,15 @@ function CryptsyClient(key, secret) {
       if (err)
         callback(err);
       else {
-        var response = JSON.parse(body);
-        if(response.success === '1')
-          callback(null, response.return);
-        else if(response.error)
-          callback(response.error);
+        try {
+          var response = JSON.parse(body);
+          if(response.success === '1')
+            callback(null, response.return);
+          else if(response.error)
+            callback(response.error);
+        } catch (e) {
+          callback(e);
+        }
       }
     });
   }
@@ -74,15 +78,15 @@ function CryptsyClient(key, secret) {
 
   self.marketdata = function(callback) {
     api_query('marketdata', callback);
-  }
+  };
 
   self.orderdata = function(callback) {
     api_query('orderdata', callback);
-  }
+  };
 
   self.getinfo = function(callback) {
     api_query("getinfo", callback);
-  }
+  };
 
   self.getmarkets = function(callback) {
     callback2 = function(err, markets) {
@@ -92,49 +96,49 @@ function CryptsyClient(key, secret) {
         self.markets[markets[i].primary_currency_code + markets[i].secondary_currency_code] = markets[i].marketid;
       }
       callback(err, markets);
-    }
+    };
     api_query('getmarkets', callback2);
-  }
+  };
 
   self.mytransactions = function(callback) {
     api_query('mytransactions', callback);
-  }
+  };
 
   self.markettrades = function(marketid, callback) {
     api_query('markettrades', callback, { marketid: marketid });
-  }
+  };
 
   self.marketorders = function(marketid, callback) {
     api_query('marketorders', callback, { marketid: marketid });
-  }
+  };
 
   self.mytrades = function(marketid, limit, callback) {
-    api_query('mytrades', callback, { marketid: marketid, limit: limit })
-  }
+    api_query('mytrades', callback, { marketid: marketid, limit: limit });
+  };
 
   self.allmytrades = function(callback) {
     api_query('allmytrades', callback);
-  }
+  };
 
   self.myorders = function(marketid, callback) {
     api_query('myorders', callback, { marketid: marketid });
-  }
+  };
 
   self.allmyorders = function(callback) {
     api_query('allmyorders', callback);
-  }
+  };
 
   self.createorder = function(marketid, ordertype, quantity, price, callback) {
     api_query('createorder', callback, { marketid: marketid, ordertype: ordertype, quantity: quantity, price: price });
-  }
+  };
 
   self.cancelorder = function(orderid, callback) {
     api_query('cancelorder', callback, { orderid: orderid });
-  }
+  };
 
   self.calculatefees = function(ordertype, quantity, price, callback) {
     api_query('calculatefees', callback, { ordertype: ordertype, quantity: quantity, price: price });
-  }
+  };
 }
 
 module.exports = CryptsyClient;
