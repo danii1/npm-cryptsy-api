@@ -66,7 +66,7 @@ function CryptsyClient(key, secret) {
 
   // This function gets the market id for a market in the format 'LTCBTC'
   self.getmarketid = function(marketname, callback) {
-    if(!self.markets || !self.markets.length)
+    if(!self.markets || !Object.keys(self.markets).length)
     {
       self.getmarkets(function() {
         callback(null, self.markets[marketname]);
