@@ -18,7 +18,7 @@ function CryptsyClient(key, secret) {
     args = args_tmp;
 
     var options = {
-      uri: 'https://www.cryptsy.com/api',
+      uri: 'https://api.cryptsy.com/api',
       agent: false,
       method: 'POST',
       headers: {
