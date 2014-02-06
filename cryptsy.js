@@ -107,9 +107,11 @@ function CryptsyClient(key, secret) {
   self.getmarkets = function(callback) {
     callback2 = function(err, markets) {
       self.markets = {};
-      for(var i in markets)
-      {
-        self.markets[markets[i].primary_currency_code + markets[i].secondary_currency_code] = markets[i].marketid;
+      if (!err) {
+        for(var i in markets)
+        {
+          self.markets[markets[i].primary_currency_code + markets[i].secondary_currency_code] = markets[i].marketid;
+        }
       }
       callback(err, markets);
     };
